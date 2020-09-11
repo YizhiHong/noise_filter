@@ -140,19 +140,20 @@ def main():
             (start, end) = datetime_range_list[i]
 
             # if the record is not in the range, add to result.
-            if (not (start <= data_time <= end)) and val > high:
-                result.append(
-                    (
-                        data_time.date().strftime("%d/%m/%Y"),
-                        data_time.time().strftime("%H:%M:%S"),
-                        val,
+            if not (start <= data_time <= end):
+                if val > high:
+                    result.append(
+                        (
+                            data_time.date().strftime("%d/%m/%Y"),
+                            data_time.time().strftime("%H:%M:%S"),
+                            val,
+                        )
                     )
-                )
             else:
-                while data_time <= end:
+                while start <= data_time <= end:
                     idx = idx + 1
                     (data_time, _) = table_list[idx]
-                    
+
                 i = i + 1
 
         else:
