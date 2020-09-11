@@ -153,7 +153,7 @@ def main():
                 while start <= data_time <= end:
                     idx = idx + 1
                     (data_time, _) = table_list[idx]
-
+                idx = idx - 1
                 i = i + 1
 
         else:
