@@ -95,7 +95,7 @@ def main():
     low = 300
     high = 391
 
-    interval_minutes = 15
+    interval_minutes = 12
 
     datetime_range_list = list()
 
@@ -138,8 +138,6 @@ def main():
         # if the index is out of the range. just leve because all range has been scan
         if i < len(datetime_range_list):
             (start, end) = datetime_range_list[i]
-            (_ ,last_end) = datetime_range_list[i - 1]
-
 
             # if the record is not in the range, add to result.
             if (not (start <= data_time <= end)) and val > high:
