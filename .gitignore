@@ -38,6 +38,7 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 output.txt
+Figure.png
 
 # Unit test / coverage reports
 htmlcov/
