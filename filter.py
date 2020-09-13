@@ -25,7 +25,7 @@ def print_result(result, record_number):
 
 
 def visualize():
-    plt.title("After filter")
+    plt.title("After filter " + str(interval_minutes)+"mins interval")
     plt.xlabel("DateTime")
     plt.ylabel("Power")
     # plt.scatter(time_list,power_list,s=1)
@@ -47,7 +47,7 @@ def visualize():
 
 def main():
     global records, DateTime, val, row, start, end, s, record_number, date, time
-    global table_list, data_time, power_list, time_list, result
+    global table_list, data_time, power_list, time_list, result, interval_minutes
     #
     # load data
     #
@@ -92,10 +92,11 @@ def main():
     #
 
     # get the range
-    low = 300
-    high = 391
+    low = 0
+    high = 390
+    cutoff = 600
 
-    interval_minutes = 12
+    interval_minutes = 120
 
     datetime_range_list = list()
 
@@ -108,7 +109,7 @@ def main():
             end = data_time + timedelta(minutes=interval_minutes)
 
             if len(datetime_range_list) > 0:
-                # if range list is not empty, make the current start is greater than last end
+                # if range list is not empty, make the current start greater than last end
                 (_, last_end) = datetime_range_list[-1]
                 if start > last_end:
                     datetime_range_list.append((start, end))
@@ -123,25 +124,26 @@ def main():
 
     print(
         "find %s range records in time range (%s, %s) from %s records"
-        % (len(datetime_range_list), low, high, record_number)
+        "\nthe time interval is %s mins"
+        % (len(datetime_range_list), low, high, record_number, interval_minutes)
     )
 
     #
     # check if is in range
     #
 
-    i = 0
+    i = 0 # to run through the range_list
     result = list()
-    idx = 0
+    idx = 0 # to run through the table_list, raw data. 
     while idx < len(table_list):
         (data_time, val) = table_list[idx]
-        # if the index is out of the range. just leve because all range has been scan
+        # if the index is out of the range. just leave because all range has been scan
         if i < len(datetime_range_list):
             (start, end) = datetime_range_list[i]
 
             # if the record is not in the range, add to result.
             if not (start <= data_time <= end):
-                if val > high:
+                if val > cutoff:
                     result.append(
                         (
                             data_time.date().strftime("%d/%m/%Y"),
@@ -153,11 +155,11 @@ def main():
                 while start <= data_time <= end:
                     idx = idx + 1
                     (data_time, _) = table_list[idx]
-                idx = idx - 1
+                idx = idx - 1 # make sure we don't miss this "first out of range" data
                 i = i + 1
 
         else:
-            if val > high:
+            if val > cutoff:
                 result.append(
                     (
                         data_time.date().strftime("%d/%m/%Y"),
